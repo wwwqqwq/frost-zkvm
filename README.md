@@ -84,5 +84,5 @@ SP1_PROVER=network NETWORK_PRIVATE_KEY=0x... \
   cargo run --release -p host -- prove "hello, frost" --proof-type groth16
 ```
 
-See the [Succinct quickstart](https://docs.succinct.xyz/docs/next/sp1/prover-network/quickstart)
+See the [Succinct quickstart](https://docs.succinct.xyz/docs/sp1/prover-network/quickstart)
 for key setup.

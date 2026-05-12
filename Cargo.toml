@@ -20,8 +20,6 @@ sp1-build = { version = "6.1.0" }
 
 clap        = { version = "4.5", features = ["derive"] }
 anyhow      = "1.0"
-# rand/rand_chacha kept at 0.8/0.3 because frost-ed25519 internally pulls
-# rand_core 0.6 (incompatible with rand_core 0.9 from rand 0.9+).
 rand        = "0.8"
 rand_chacha = "0.3"
 hex         = "0.4"

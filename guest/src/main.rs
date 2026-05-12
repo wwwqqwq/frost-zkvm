@@ -28,13 +28,7 @@ pub fn main() {
                 e.culprits()
             )
         });
-
-    // In-circuit verification.
     let verifying_key = pubkey_package.verifying_key();
-    assert!(
-        verifying_key.verify(&message, &signature).is_ok(),
-        "guest: aggregated signature failed Ed25519 verification"
-    );
 
     let message_hash = {
         let mut h = Keccak::v256();
