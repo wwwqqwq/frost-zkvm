@@ -25,16 +25,13 @@ enum Command {
         threshold: u16,
         total: u16,
     },
-    /// Round-1: generate this participant's nonce/commitment pair.
     Commit {
         id: u16,
     },
-    /// Round-2: produce this participant's signature share over `message`.
     Sign {
         id: u16,
         message: String,
     },
-    /// Aggregate every signature share on disk and prove the result inside SP1.
     Prove {
         message: String,
         #[arg(long, value_enum, default_value_t = ProofType::Core)]
