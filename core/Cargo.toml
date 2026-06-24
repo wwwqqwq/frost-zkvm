@@ -1,0 +1,21 @@
+[package]
+name        = "frost-core"
+description = "FROST wire formats (always) and host ceremony logic (feature `host`)."
+version     = "0.1.0"
+edition     = "2021"
+license     = "MIT"
+authors     = ["wwwqqwq"]
+
+[features]
+default = []
+host = ["dep:anyhow", "dep:rand", "dep:rand_chacha", "dep:hex", "dep:bincode"]
+
+[dependencies]
+frost-ed25519 = { version = "3.0", default-features = false, features = ["serialization"] }
+serde         = { version = "1", default-features = false, features = ["derive", "alloc"] }
+
+anyhow      = { version = "1.0", optional = true }
+rand        = { version = "0.8", optional = true }
+rand_chacha = { version = "0.3", optional = true }
+hex         = { version = "0.4", optional = true }
+bincode     = { version = "2.0", default-features = false, features = ["serde", "alloc"], optional = true }

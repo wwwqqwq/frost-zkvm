@@ -1,0 +1,30 @@
+[workspace]
+members = ["guest", "host"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["wwwqqwq"]
+
+[workspace.dependencies]
+frost-ed25519 = { version = "3.0", default-features = false, features = ["serialization"] }
+tiny-keccak    = { version = "2.0", features = ["keccak"] }
+clap           = { version = "4.5", features = ["derive"] }
+anyhow         = "1.0"
+hex            = "0.4"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+jolt = { package = "jolt-sdk", git = "https://github.com/a16z/jolt", rev = "ad03c83", default-features = false }
+
+[replace]
+"ark-bn254:0.5.0" = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
+"ark-ff:0.5.0" = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
+"ark-ec:0.5.0" = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
+"ark-serialize:0.5.0" = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
+
+[profile.release]
+lto           = "thin"
+codegen-units = 1
+opt-level     = 3

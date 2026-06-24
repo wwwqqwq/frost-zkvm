@@ -1,3 +1,4 @@
 [toolchain]
-channel = "stable"
-components = ["llvm-tools", "rustc-dev"]
+channel = "1.95"
+targets = ["riscv32imac-unknown-none-elf", "riscv64imac-unknown-none-elf"]
+components = ["cargo", "rustc", "clippy", "rustfmt", "llvm-tools", "rustc-dev", "rust-src"]

@@ -1,0 +1,23 @@
+[package]
+name        = "host"
+description = "FROST-Ed25519 coordinator + RISC Zero prover CLI."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+default-run = "host"
+
+[[bin]]
+name = "host"
+path = "src/main.rs"
+
+[dependencies]
+methods            = { path = "../methods" }
+risc0-zkvm         = { workspace = true }
+clap               = { workspace = true }
+anyhow             = { workspace = true }
+tiny-keccak        = { workspace = true }
+hex                = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+frost-core = { workspace = true }
