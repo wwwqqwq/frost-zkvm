@@ -16,3 +16,10 @@ pgo-data.profdata
 .vscode/
 
 state/
+
+aggregator/inner/
+aggregator/outer/
+aggregator/out/
+aggregator/artifacts/
+aggregator/aggregator
+aggregator/bin/

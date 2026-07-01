@@ -28,5 +28,12 @@ just demo jolt
 
 Same ceremony for all backends. Swap `sp1` for `risc0` or `jolt`.
 
-Manual steps: `just setup`, `just commit`, `just sign`, `just prove`.
+Outer gnark circuit aggregates inner Groth16 proofs (2-of-3: SP1 + RISC0 + dummy(Jolt in the future) slot).
 
+```sh
+just dump-aggregator
+
+just aggregator-setup
+just aggregator-prove
+just aggregator-verify
+```

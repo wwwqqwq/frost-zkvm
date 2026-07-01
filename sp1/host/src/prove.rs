@@ -18,7 +18,12 @@ pub enum ProofType {
     Groth16,
 }
 
-pub fn run(message: String, proof_type: ProofType, execute_only: bool) -> Result<()> {
+pub fn run(
+    message: String,
+    proof_type: ProofType,
+    execute_only: bool,
+    dump_dir: Option<std::path::PathBuf>,
+) -> Result<()> {
     let pubkey_package = storage::load_pubkey_package()
         .context("loading group public-key package; run `setup` first")?;
 
@@ -87,6 +92,17 @@ pub fn run(message: String, proof_type: ProofType, execute_only: bool) -> Result
         return Err(anyhow!(
             "message hash in proof does not match expected hash of `{message}`"
         ));
+    }
+
+    if let Some(dir) = dump_dir {
+        storage::write_artifacts(
+            &dir,
+            &[
+                ("proof.bin", proof.bytes().as_slice()),
+                ("public_values.bin", proof.public_values.as_slice()),
+                ("vkey_hash.txt", pk.verifying_key().bytes32().as_bytes()),
+            ],
+        )?;
     }
 
     println!(

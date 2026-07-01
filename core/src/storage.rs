@@ -49,6 +49,15 @@ fn write_bin<T: Serialize>(path: &Path, value: &T) -> Result<()> {
     Ok(())
 }
 
+pub fn write_artifacts(dir: &Path, files: &[(&str, &[u8])]) -> Result<()> {
+    fs::create_dir_all(dir).with_context(|| format!("creating {}", dir.display()))?;
+    for &(name, bytes) in files {
+        let path = dir.join(name);
+        fs::write(&path, bytes).with_context(|| format!("writing {}", path.display()))?;
+    }
+    Ok(())
+}
+
 fn read_bin<T: DeserializeOwned>(path: &Path) -> Result<T> {
     let bytes = fs::read(path).with_context(|| format!("reading {}", path.display()))?;
     let (value, _) = bincode::serde::decode_from_slice(&bytes, bincode::config::standard())

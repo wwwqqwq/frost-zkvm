@@ -4,7 +4,10 @@ use anyhow::{anyhow, Context, Result};
 use clap::ValueEnum;
 use frost_core::{storage, FrostPayload, ProofOutputs};
 use methods::{FROST_GUEST_ELF, FROST_GUEST_ID};
-use risc0_zkvm::{default_executor, default_prover, ExecutorEnv, Prover, ProverOpts};
+use risc0_zkvm::{
+    default_executor, default_prover, sha::Digestible, ExecutorEnv,
+    Groth16ReceiptVerifierParameters, Prover, ProverOpts,
+};
 use tiny_keccak::{Hasher, Keccak};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, ValueEnum)]
@@ -24,7 +27,12 @@ impl ProofType {
     }
 }
 
-pub fn run(message: String, proof_type: ProofType, execute_only: bool) -> Result<()> {
+pub fn run(
+    message: String,
+    proof_type: ProofType,
+    execute_only: bool,
+    dump_dir: Option<std::path::PathBuf>,
+) -> Result<()> {
     let pubkey_package = storage::load_pubkey_package()
         .context("loading group public-key package; run `setup` first")?;
 
@@ -87,6 +95,29 @@ pub fn run(message: String, proof_type: ProofType, execute_only: bool) -> Result
         return Err(anyhow!(
             "message hash in receipt does not match expected hash of `{message}`"
         ));
+    }
+
+    if let Some(dir) = dump_dir {
+        let groth16 = receipt
+            .inner
+            .groth16()
+            .map_err(|_| anyhow!("receipt is not Groth16"))?;
+        let claim = groth16
+            .claim
+            .as_value()
+            .map_err(|_| anyhow!("groth16 claim is pruned"))?
+            .digest();
+        let params = Groth16ReceiptVerifierParameters::default();
+        storage::write_artifacts(
+            &dir,
+            &[
+                ("seal.bin", &groth16.seal),
+                ("public_values.bin", receipt.journal.as_ref()),
+                ("claim_digest.bin", claim.as_bytes()),
+                ("control_root.bin", params.control_root.as_bytes()),
+                ("bn254_control_id.bin", params.bn254_control_id.as_bytes()),
+            ],
+        )?;
     }
 
     println!(

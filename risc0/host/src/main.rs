@@ -38,6 +38,8 @@ enum Command {
         proof_type: ProofType,
         #[arg(long)]
         execute_only: bool,
+        #[arg(long, requires_if("groth16", "proof_type"))]
+        dump_dir: Option<std::path::PathBuf>,
     },
 }
 
@@ -54,6 +56,7 @@ fn main() -> Result<()> {
             message,
             proof_type,
             execute_only,
-        } => prove::run(message, proof_type, execute_only),
+            dump_dir,
+        } => prove::run(message, proof_type, execute_only, dump_dir),
     }
 }
